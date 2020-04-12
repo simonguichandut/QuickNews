@@ -1,1 +1,4 @@
 .__pycache__
+test.py
+parsers/theguardian.py
+v0news.py

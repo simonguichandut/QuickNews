@@ -2,77 +2,60 @@ import requests
 from lxml import html
 import webbrowser
 
-def fix(s): # replace some html ugliness
+from parsers import bbcnews,nytimes,lapresse,ledevoir
+
+broken_msg = "I think this website has changed and I can no longer read it."
+
+Names = ["BBC News","The New York Times","La Presse","Le Devoir"]
+URLs = ["https://www.bbc.com/news","https://www.nytimes.com/","https://www.lapresse.ca","https://www.ledevoir.com"]
+Parsers = [bbcnews,nytimes,lapresse,ledevoir]
+
+def clean(s): # replace some html ugliness
     s=s.replace("\n","") # line breaks
     s=s.replace("  ","") # excessive whitespace
     s=s.replace("\xa0"," ") # space after number
     return s
 
-broken_msg = "I think this website has changed and I can no longer read it :("
+Links = []
+i = 1
+max_per_journal = 3
 
-links = []
-count = 1
+for name,url,parser in zip(Names,URLs,Parsers):
 
-### La Presse
-print('\nLa Presse')
-url = "https://www.lapresse.ca"
+    print('\n'+name)
 
-try: 
-    page = requests.get(url)
-    tree = html.fromstring(page.content)
-    man = tree.xpath("/html/body/div[4]/div[3]/div[1]/section")[0] # path to manchettes
+    try:
+        page = requests.get(url,timeout=0.5)
 
-    # Une
-    print('[%d] \t '%count, fix(man[1][0][0].get('alt')))
-    links.append(url+man[1][0].get('href'))
-    # Trio
-    for i in range(3):
-        print(('[%d] \t '%(i+1+count)), fix(man[3][i][2][0][1].text))
-        links.append(url+man[3][i][0].get('href'))
+    except:
+        print('Request timed out')
+        
+    else:
+        # print('connection succesful')
 
-    count+=4
-except:
-    print(broken_msg)
-    exit
+        tree = html.fromstring(page.content)
+        try:
+            titles,links = parser.get(tree)
+        except:
+            print('Parser broken')
 
-
-### Le Devoir
-print('\nLe Devoir')
-url = "https://www.ledevoir.com"
-
-try: 
-    page = requests.get(url)
-    tree = html.fromstring(page.content)
-    man = tree.xpath("//*[@id='articles']/div[1]/div[1]/div/div[1]")[0] # path to manchettes
-
-    for i in range(2):
-        print(('[%d] \t '%(i+count)), fix(man[i][0][0][0][1].text))
-        links.append(url+man[i][0][0][0].get('href'))
-
-    print(('[%d] \t '%(count+2)), fix(man[2][0][0][0][0].text))
-    links.append(url+man[2][0][0][0].get('href'))
-
-    count+=3
-except:
-    print(broken_msg)
-    exit
-
-
-
-
+        else:
+            for k in range(min(max_per_journal,len(titles))):
+                print('[%d] \t '%i, clean(titles[k]))
+                Links.append(url+links[k])
+                i+=1
 
 
 
 ### Command-line interface
-
 print("\nEnter [id] of article(s) to open web pages, or nothing to exit.")
 # print("Please disable your adblocker :)")
 x=input()
-if x=="0" or x==None or x=="":
+if x==None or x=="":
     print('\n')
 else:
     for id in (eval(i) for i in x.split(" ")):
-        if id<0 or id>len(links):
+        if id<0 or id>len(Links):
             print('Give valid id')
         else:
-            webbrowser.open(links[id-1])
+            webbrowser.open(Links[id-1])
