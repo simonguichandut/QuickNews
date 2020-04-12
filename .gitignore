@@ -1,5 +1,6 @@
 .__pycache__
-parsers/__pycache__
+parsers/__pycache__/
+.DS_Store
 test.py
 parsers/theguardian.py
 v0news.py

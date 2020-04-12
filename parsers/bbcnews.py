@@ -13,7 +13,7 @@ def parse(tree,titles,urls,save_next=False):
 
         if t!=None:
             # print(t)
-            if save_next and len(titles)==len(urls)-1 and t!="Video":
+            if save_next and len(titles)==len(urls)-1 and t!="Video" and t!="Live":
                 # print('TITLE:',t)
                 titles.append(t)
                 save_next=False

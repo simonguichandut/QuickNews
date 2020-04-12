@@ -7,4 +7,4 @@ Or add `alias news="python [path-to-QuickNews]/news.py"` to `.bash_profile` !
  
 
  
-The code will stop working work if/when the websites significantly change their layout.
+The code will stop working if/when the websites significantly change their layout.

@@ -33,18 +33,18 @@ def parse(tree,titles,urls,save_next=False):
 
 
 def get(tree):
-    subtree = tree.xpath("//*[@id='site-content']/div/div[1]/div[2]/section")[0] # path to headlines specific to nytimes
+    subtree = tree.xpath("//*[@id='site-content']/div/div[1]/div[2]")[0] # path to headlines specific to nytimes
     return parse(subtree,[],[])
 
 
 ## Test
-# import requests
-# from lxml import html
-# url = "https://www.nytimes.com/"
-# page = requests.get(url)
-# tree = html.fromstring(page.content)
-# titles,urls=get(tree)
-# for t,u in zip(titles,urls):
-#     print(t)
-#     print(url+u)
-#     print('\n')
+#import requests
+#from lxml import html
+#url = "https://www.nytimes.com/"
+#page = requests.get(url)
+#tree = html.fromstring(page.content)
+#titles,urls=get(tree)
+#for t,u in zip(titles,urls):
+#    print(t)
+#    print(url+u)
+#    print('\n')
