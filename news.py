@@ -7,7 +7,7 @@ from parsers import bbcnews,nytimes,lapresse,ledevoir
 broken_msg = "I think this website has changed and I can no longer read it."
 
 Names = ["BBC News","The New York Times","La Presse","Le Devoir"]
-URLs = ["https://www.bbc.com/news","https://www.nytimes.com/","https://www.lapresse.ca","https://www.ledevoir.com"]
+URLs = ["https://www.bbc.com/news","https://www.nytimes.com","https://www.lapresse.ca","https://www.ledevoir.com"]
 Parsers = [bbcnews,nytimes,lapresse,ledevoir]
 
 def clean(s): # replace some html ugliness
@@ -42,7 +42,12 @@ for name,url,parser in zip(Names,URLs,Parsers):
         else:
             for k in range(min(max_per_journal,len(titles))):
                 print('[%d] \t '%i, clean(titles[k]))
-                Links.append(url+links[k])
+
+                if url in links[k]: # this happens sometimes for nytimes
+                    Links.append(links[k])
+                else:
+                    Links.append(url+links[k])
+                    
                 i+=1
 
 
