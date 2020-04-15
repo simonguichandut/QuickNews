@@ -5,6 +5,8 @@ Simply run:
 
 Or add `alias news="python [path-to-QuickNews]/news.py"` to `.bash_profile` !
  
-
+Requirements:
+Python 3.0+
+Modules : requests,lxml,webbrowser
  
 The code will stop working if/when the websites significantly change their layout.

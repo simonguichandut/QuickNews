@@ -1,0 +1,5 @@
+uniformalize parsing functions and the tricks used in individual ones at the moment (e.g. disallowed strings)
+lambda -> def (pep8)
+add verbose in parsers for debug
+change xpath calls from incomprehensible mumble (/section/div/div[2]/div...) to keywords
+find way to make parsers more robust when layout changes
